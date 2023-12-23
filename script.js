@@ -5,15 +5,24 @@ var gif2El = document.getElementById("magicGif2");
 var audioSuccess = document.getElementById("audioSuccess");
 var audioFailure = document.getElementById("audioFailure");
 
+var isGifPlaying = false;
+
 function hideGifOnMusicEnd() {
     gif1El.style.display = "none";
     gif2El.style.display = "none";
+    isGifPlaying = false;
+    audioSuccess.pause(); 
+    audioFailure.pause(); 
 }
 
 audioSuccess.addEventListener("ended", hideGifOnMusicEnd);
 audioFailure.addEventListener("ended", hideGifOnMusicEnd);
 
 btnEl.addEventListener("click", function () {
+    if (isGifPlaying) {
+        hideGifOnMusicEnd(); 
+    }
+
     var isSevenLetterWord = inputEl.value.trim().length === 7;
 
     var digitSum = Array.from(inputEl.value.trim()).reduce(function (acc, digit) {
@@ -26,11 +35,19 @@ btnEl.addEventListener("click", function () {
 
         audioSuccess.play();
         inputEl.value = "";
+        isGifPlaying = true;
     } else {
         gif1El.style.display = "none";
         gif2El.style.display = "block";
 
         audioFailure.play();
         inputEl.value = "";
+        isGifPlaying = true;
+    }
+});
+
+inputEl.addEventListener("click", function () {
+    if (isGifPlaying) {
+        hideGifOnMusicEnd(); 
     }
 });
